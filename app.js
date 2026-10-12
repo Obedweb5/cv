@@ -21,6 +21,7 @@
     h("a", { href: url, target: "_blank", rel: "noopener noreferrer" }, label);
 
   function renderSide(activeId) {
+    const facts = [["Age", profile.age], ["From", profile.from]].filter((f) => f[1]);
     side.replaceChildren(
       h("div", { class: "id" },
         h("p", { class: "name" }, profile.name),
@@ -44,6 +45,9 @@
         )
       ),
       h("div", { class: "contact" },
+        facts.length > 0 && h("dl", { class: "facts" },
+          facts.map(([k, v]) => [h("dt", {}, k), h("dd", {}, String(v))])
+        ),
         profile.location && h("p", {}, profile.location),
         profile.email && h("p", {}, h("a", { href: "mailto:" + profile.email }, profile.email)),
         h("ul", { class: "links" },
@@ -101,13 +105,19 @@
       ));
     }
 
-    if (cv.education && cv.education.length) {
+    const education = profile.education && profile.education.length ? profile.education : cv.education;
+    if (education && education.length) {
       parts.push(section("Education",
         h("div", { class: "rows" },
-          cv.education.map((e) =>
+          education.map((e) =>
             h("article", { class: "row" },
               h("p", { class: "when" }, e.dates),
-              h("div", {}, h("h3", {}, e.title, h("span", { class: "org" }, " at " + e.org)))
+              h("div", {},
+                h("h3", {}, e.title, h("span", { class: "org" }, e.org ? " at " + e.org : "")),
+                e.course && h("p", {}, "Course: " + e.course),
+                e.result && h("p", { class: "result" }, e.result),
+                e.grades && e.grades.length > 0 && h("ul", { class: "tags" }, e.grades.map((g) => h("li", {}, g)))
+              )
             )
           )
         )
@@ -119,6 +129,12 @@
         h("dl", { class: "skills" },
           cv.skills.map((s) => [h("dt", {}, s.group), h("dd", {}, s.items.join(", "))])
         )
+      ));
+    }
+
+    if (profile.hobbies && profile.hobbies.length) {
+      parts.push(section("Hobbies and interests",
+        h("ul", { class: "tags" }, profile.hobbies.map((x) => h("li", {}, x)))
       ));
     }
 
