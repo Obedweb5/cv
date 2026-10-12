@@ -118,3 +118,9 @@ h3 { font-size: 1.1rem; margin: 0; font-weight: 600; }
   .side, .btn, .skip { display: none; }
   body { background: #fff; color: #000; }
 }
+
+/* ---------- Added: personal facts, results ---------- */
+.facts { display: grid; grid-template-columns: auto 1fr; gap: .2rem 1rem; margin: 0 0 .75rem; }
+.facts dt { color: var(--muted); }
+.facts dd { margin: 0; color: var(--ink); font-weight: 500; }
+.result { font-weight: 500; }
