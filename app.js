@@ -20,10 +20,27 @@
   const ext = (label, url) =>
     h("a", { href: url, target: "_blank", rel: "noopener noreferrer" }, label);
 
+  // ---- Photo: uses photo.jpg by default; shows initials if the file is missing ----
+  const photoSrc = profile.photo === undefined ? "photo.jpg" : profile.photo;
+
+  function initials(name) {
+    return name.split(/\s+/).filter(Boolean).slice(0, 2).map((w) => w[0].toUpperCase()).join("");
+  }
+
+  function photoEl() {
+    const fallback = () => h("div", { class: "photo initials", "aria-hidden": "true" }, initials(profile.name));
+    if (!photoSrc) return fallback();
+    const img = h("img", { class: "photo", src: photoSrc, alt: "Photo of " + profile.name });
+    img.addEventListener("error", () => img.replaceWith(fallback()));
+    return img;
+  }
+
   function renderSide(activeId) {
     const facts = [["Age", profile.age], ["From", profile.from]].filter((f) => f[1]);
+
     side.replaceChildren(
       h("div", { class: "id" },
+        photoEl(),
         h("p", { class: "name" }, profile.name),
         h("p", { class: "role" }, profile.title)
       ),
@@ -52,7 +69,8 @@
         profile.email && h("p", {}, h("a", { href: "mailto:" + profile.email }, profile.email)),
         h("ul", { class: "links" },
           (profile.links || []).map((l) => h("li", {}, ext(l.label, l.url)))
-        )
+        ),
+        profile.email && h("a", { class: "mail-btn", href: "mailto:" + profile.email }, "Email me")
       )
     );
   }
@@ -90,7 +108,7 @@
 
     if (cv.projects && cv.projects.length) {
       parts.push(section("Projects",
-        h("div", { class: "rows" },
+        h("div", { class: "rows plain" },
           cv.projects.map((p) =>
             h("article", { class: "row" },
               h("p", { class: "when" }, p.url ? ext("View project", p.url) : ""),
