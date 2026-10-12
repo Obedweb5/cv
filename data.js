@@ -5,10 +5,10 @@
    ============================================================ */
 window.PORTFOLIO = {
   profile: {
-    name: "Your Name",
-    title: "Your professional title",
-    location: "City, Country",
-    email: "you@example.com",
+    name: "Obed Ondara",
+    title: "OBED TECH ENTERPRISE LIM",
+    location: "Nairobi, Kenya",
+    email: "techobed4@gmail.com",
     links: [
       { label: "LinkedIn", url: "https://linkedin.com/in/your-profile" },
       { label: "GitHub", url: "https://github.com/your-username" }
